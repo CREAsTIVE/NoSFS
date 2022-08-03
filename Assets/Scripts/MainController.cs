@@ -5,7 +5,7 @@ using UnityEngine;
 public class MainController : MonoBehaviour
 {
     public RocketController CurrentRocket;
-    [SerializeField] List<RocketController> _rockets = new List<RocketController>();
+    [SerializeField] List<RocketController> _rockets = new();
 
     private Camera _cam;
 
@@ -14,6 +14,9 @@ public class MainController : MonoBehaviour
     //Constants:
     public const float CALCULATE_PHYSIC_SIZE = 10f;
     public const float GRAVITY = 9.8f;
+
+
+    public float GlobalTime = 0f;
 
     void Start()
     {
@@ -51,5 +54,7 @@ public class MainController : MonoBehaviour
 
         _cam.transform.position = new Vector3(CurrentRocket.transform.position.x, CurrentRocket.transform.position.y, transform.position.z);
         CurrentRocket.Control(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+
+        GlobalTime += Time.deltaTime;
     }
 }
