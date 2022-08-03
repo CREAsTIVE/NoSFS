@@ -8,6 +8,7 @@ public class PlanetGenerator : MonoBehaviour
     [SerializeField] private int _colliderVertsCount = 100;
     [SerializeField] private float _radius = 5;
     [SerializeField] private float _physicSize = 1f; // in units
+    public float mass = 100f;
 
     private MeshFilter mesh;
     private EdgeCollider2D ec2d;
@@ -47,7 +48,7 @@ public class PlanetGenerator : MonoBehaviour
             _maxAngle = br_angle + Mathf.PI * 2;
         }
 
-        if (transform.position.x > bl.x & transform.position.x < br.x & transform.position.y > bl.y & transform.position.y < tr.y)
+        if (0 > bl.x & 0 < br.x & 0 > bl.y & 0 < tr.y)
             GenerateMesh();
         else 
             GenerateMesh(_minAngle, _maxAngle);
@@ -56,7 +57,7 @@ public class PlanetGenerator : MonoBehaviour
     }
 
     [ContextMenu("Generate")]
-    public void GenerateMesh() => GenerateMesh(0, Mathf.PI * 2);
+    public void GenerateMesh() => GenerateMesh(0, Mathf.PI*2);
     public void GenerateMesh(float _minAngle, float _maxAngle)
     {
         Mesh mesh = new Mesh();
