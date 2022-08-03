@@ -381,12 +381,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f707e2438800c0a43b0ff7acdb2adcc4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8db4e5f48501e61448e731d2982d25ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rSelect: 0
-  _rocket: {fileID: 0}
-  rockets: []
+  CurrentRocket: {fileID: 0}
+  _rockets:
+  - {fileID: 570278817}
+  - {fileID: 1943389280}
 --- !u!1 &570278816
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,13 +600,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d0b5b0a98942542be5576a6f9c4868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshCount: 360
-  _colliderCount: 100
+  _meshVertsCount: 360
+  _colliderVertsCount: 100
   _radius: 5
-  _aAngle: 0
-  _bAngle: 6.283185
-  _pSize: 1
-  _rocket: {fileID: 0}
+  _physicSize: 1
 --- !u!23 &1483948163
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -613,7 +611,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483948161}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

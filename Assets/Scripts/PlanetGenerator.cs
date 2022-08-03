@@ -4,27 +4,28 @@ using UnityEngine;
 
 public class PlanetGenerator : MonoBehaviour
 {
-    [SerializeField] private int _meshCount = 360;
-    [SerializeField] private int _colliderCount = 100;
+    [SerializeField] private int _meshVertsCount = 360;
+    [SerializeField] private int _colliderVertsCount = 100;
     [SerializeField] private float _radius = 5;
-    [SerializeField] private float _aAngle = 0f;
-    [SerializeField] private float _bAngle = 6.283185f;
-    [SerializeField] private float _pSize = 1f;
-    Main_Controller main_Controller;
-    Rocket_Controller r_controller;
-    [SerializeField] private GameObject _rocket;
-    private EdgeCollider2D ec2d;
+    [SerializeField] private float _physicSize = 1f; // in units
 
+    private MeshFilter mesh;
+    private EdgeCollider2D ec2d;
+    public float getRadius() => _radius;
+    [ContextMenu("upd")]
     private void Start()
     {
         ec2d = GetComponent<EdgeCollider2D>();
-        main_Controller = Camera.main.GetComponent<Main_Controller>();
+        mesh = GetComponent<MeshFilter>();
     }
 
     void Update()
     {
-        _rocket = main_Controller._rocket;
-        r_controller = _rocket.GetComponent<Rocket_Controller>();
+        //перенести в Start
+        {
+            _physicSize = Mathf.Atan(0.5f * MainController.CALCULATE_PHYSIC_SIZE / _radius)*2f;
+        }
+        //-
 
         Vector2 bl = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane)) - transform.position;
         Vector2 br = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, Camera.main.nearClipPlane)) - transform.position;
@@ -34,60 +35,56 @@ public class PlanetGenerator : MonoBehaviour
         float br_angle = Mathf.Atan2(br.y, br.x);
         float tl_angle = Mathf.Atan2(tl.y, tl.x);
         float tr_angle = Mathf.Atan2(tr.y, tr.x);
-        _aAngle = Mathf.Min(bl_angle, br_angle, tl_angle, tr_angle);
-        _bAngle = Mathf.Max(bl_angle, br_angle, tl_angle, tr_angle);
+        float _minAngle = Mathf.Min(bl_angle, br_angle, tl_angle, tr_angle);
+        float _maxAngle = Mathf.Max(bl_angle, br_angle, tl_angle, tr_angle);
 
-        if (_bAngle < _aAngle)
-        {
-            var temp = _aAngle;
-            _aAngle = _bAngle;
-            _bAngle = temp;
-        }
+        if (_maxAngle < _minAngle)
+            (_minAngle, _maxAngle) = (_maxAngle, _minAngle);
 
-        if (_bAngle - _aAngle > Mathf.PI)
+        if (_maxAngle - _minAngle > Mathf.PI)
         {
-            _aAngle = tr_angle;
-            _bAngle = br_angle + Mathf.PI * 2;
+            _minAngle = tr_angle;
+            _maxAngle = br_angle + Mathf.PI * 2;
         }
 
         if (transform.position.x > bl.x & transform.position.x < br.x & transform.position.y > bl.y & transform.position.y < tr.y)
-        {
-            _aAngle = 0;
-            _bAngle = 6.283185f;
-        }
-        MeshGenerate();
-        GenerateCollide();
+            GenerateMesh();
+        else 
+            GenerateMesh(_minAngle, _maxAngle);
+
+        GenerateCollider();
     }
 
     [ContextMenu("Generate")]
-    public void MeshGenerate()
+    public void GenerateMesh() => GenerateMesh(0, Mathf.PI * 2);
+    public void GenerateMesh(float _minAngle, float _maxAngle)
     {
         Mesh mesh = new Mesh();
 
-        Vector3[] vertices = new Vector3[_meshCount + 1];
-        Vector2[] uv = new Vector2[_meshCount + 1];
-        int[] triangles = new int[_meshCount * 3];
+        Vector3[] vertices = new Vector3[_meshVertsCount + 1];
+        Vector2[] uv = new Vector2[_meshVertsCount + 1];
+        int[] triangles = new int[_meshVertsCount * 3];
 
-        for (int n = 0; n < _meshCount; n++)
+        for (int n = 0; n < _meshVertsCount; n++)
         {
-            float angle_p = (n / (_meshCount - 1f) * (_bAngle - _aAngle)) + (_aAngle);
+            float angle_p = (n / (_meshVertsCount - 1f) * (_maxAngle - _minAngle)) + (_minAngle);
             vertices[n] = new Vector3(Mathf.Cos(angle_p) * _radius, Mathf.Sin(angle_p) * _radius);
             uv[n] = vertices[n] / _radius / 2f + new Vector3(0.5f, 0.5f);
         }
-        vertices[_meshCount] = new Vector3(0, 0);
-        uv[_meshCount] = new Vector3(0.5f, 0.5f);
+        vertices[_meshVertsCount] = new Vector3(0, 0);
+        uv[_meshVertsCount] = new Vector3(0.5f, 0.5f);
 
-        for (int i = 0; i < _meshCount; i++)
+        for (int i = 0; i < _meshVertsCount; i++)
         {
-            if (i < _meshCount - 1)
+            if (i < _meshVertsCount - 1)
             {
-                triangles[i * 3] = _meshCount;
+                triangles[i * 3] = _meshVertsCount;
                 triangles[i * 3 + 1] = i;
                 triangles[i * 3 + 2] = i + 1;
             }
             else
             {
-                triangles[i * 3] = _meshCount;
+                triangles[i * 3] = _meshVertsCount;
                 triangles[i * 3 + 1] = i;
                 triangles[i * 3 + 2] = 0;
             }
@@ -97,20 +94,19 @@ public class PlanetGenerator : MonoBehaviour
         mesh.uv = uv;
         mesh.triangles = triangles;
 
-        GetComponent<MeshFilter>().mesh = mesh;
+        this.mesh.mesh = mesh;
     }
 
-    public void GenerateCollide()
+    public void GenerateCollider()
     {
-        float size = Mathf.Atan(_pSize / _radius) * 2f;
-        float ang = Mathf.Atan2(_rocket.transform.position.y - transform.position.y, _rocket.transform.position.x - transform.position.x);
+        float ang = Mathf.Atan2(MainController.main.transform.position.y - transform.position.y, MainController.main.transform.position.x - transform.position.x) - (_physicSize / 2);
         
-        Vector2[] c_points = new Vector2[_colliderCount];
-        for (int n = 0; n < _colliderCount; n++)
+        Vector2[] collider_points = new Vector2[_colliderVertsCount];
+        for (int n = 0; n < _colliderVertsCount; n++)
         {
-            float cAngle_p = n / (_colliderCount - 1f) * size + ang - (size/2);
-            c_points[n] = new Vector2(Mathf.Cos(cAngle_p) * _radius, Mathf.Sin(cAngle_p) * _radius);
+            float cAngle_p = n / (_colliderVertsCount - 1f) * _physicSize + ang;
+            collider_points[n] = new Vector2(Mathf.Cos(cAngle_p) * _radius, Mathf.Sin(cAngle_p) * _radius);
         }
-        ec2d.points = c_points;
+        ec2d.points = collider_points;
     }
 }

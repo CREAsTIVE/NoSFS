@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rocket_Controller : MonoBehaviour
+public class RocketController : MonoBehaviour
 {
     Rigidbody2D rb;
     [SerializeField] private float _rotateSpeed = 1f;
