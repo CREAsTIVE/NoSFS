@@ -16,17 +16,9 @@ public class Rocket_Controller : MonoBehaviour
     {
         
     }
-
-    public void TurnLeft()
+    public void Control(float speed, float rotation)
     {
-        rb.angularVelocity += _rotateSpeed;
-    }
-    public void TurnRight()
-    {
-        rb.angularVelocity -= _rotateSpeed;
-    }
-    public void TurnEngine()
-    {
-        rb.AddForce(transform.up * _engineSpeed);
+        rb.angularVelocity -= _rotateSpeed * rotation;
+        rb.AddForce(transform.up * _engineSpeed * speed);
     }
 }

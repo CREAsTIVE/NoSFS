@@ -21,12 +21,10 @@ public class PlanetGenerator : MonoBehaviour
         main_Controller = Camera.main.GetComponent<Main_Controller>();
     }
 
-
     void Update()
     {
         _rocket = main_Controller._rocket;
         r_controller = _rocket.GetComponent<Rocket_Controller>();
-
 
         Vector2 bl = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, Camera.main.nearClipPlane)) - transform.position;
         Vector2 br = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, Camera.main.nearClipPlane)) - transform.position;
@@ -57,11 +55,12 @@ public class PlanetGenerator : MonoBehaviour
             _aAngle = 0;
             _bAngle = 6.283185f;
         }
-
-        MeshGenerate(_aAngle, _bAngle);
+        MeshGenerate();
+        GenerateCollide();
     }
 
-    public void MeshGenerate(float a, float b)
+    [ContextMenu("Generate")]
+    public void MeshGenerate()
     {
         Mesh mesh = new Mesh();
 
@@ -71,7 +70,7 @@ public class PlanetGenerator : MonoBehaviour
 
         for (int n = 0; n < _meshCount; n++)
         {
-            float angle_p = (n / (_meshCount - 1f) * (b - a)) + (a);
+            float angle_p = (n / (_meshCount - 1f) * (_bAngle - _aAngle)) + (_aAngle);
             vertices[n] = new Vector3(Mathf.Cos(angle_p) * _radius, Mathf.Sin(angle_p) * _radius);
             uv[n] = vertices[n] / _radius / 2f + new Vector3(0.5f, 0.5f);
         }
@@ -99,10 +98,9 @@ public class PlanetGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         GetComponent<MeshFilter>().mesh = mesh;
-        CollideGenerate(a, b);
     }
 
-    public void CollideGenerate(float a, float b)
+    public void GenerateCollide()
     {
         float size = Mathf.Atan(_pSize / _radius) * 2f;
         float ang = Mathf.Atan2(_rocket.transform.position.y - transform.position.y, _rocket.transform.position.x - transform.position.x);
@@ -114,46 +112,5 @@ public class PlanetGenerator : MonoBehaviour
             c_points[n] = new Vector2(Mathf.Cos(cAngle_p) * _radius, Mathf.Sin(cAngle_p) * _radius);
         }
         ec2d.points = c_points;
-    }
-
-    [ContextMenu("Generate")]
-    public void MeshGenerateEditor()
-    {
-        Mesh mesh = new Mesh();
-
-        Vector3[] vertices = new Vector3[_meshCount + 1];
-        Vector2[] uv = new Vector2[_meshCount + 1];
-        int[] triangles = new int[_meshCount * 3];
-
-        for (int n = 0; n < _meshCount; n++)
-        {
-            float angle_p = (n / (_meshCount - 1f)) * 6.283185f;
-            vertices[n] = new Vector3(Mathf.Cos(angle_p) * _radius, Mathf.Sin(angle_p) * _radius);
-            uv[n] = vertices[n] / _radius / 2f + new Vector3(0.5f, 0.5f);
-        }
-        vertices[_meshCount] = new Vector3(0, 0);
-        uv[_meshCount] = new Vector3(0.5f, 0.5f);
-
-        for (int i = 0; i < _meshCount; i++)
-        {
-            if (i < _meshCount - 1)
-            {
-                triangles[i * 3] = _meshCount;
-                triangles[i * 3 + 1] = i;
-                triangles[i * 3 + 2] = i + 1;
-            }
-            else
-            {
-                triangles[i * 3] = _meshCount;
-                triangles[i * 3 + 1] = i;
-                triangles[i * 3 + 2] = 0;
-            }
-        }
-
-        mesh.vertices = vertices;
-        mesh.uv = uv;
-        mesh.triangles = triangles;
-
-        GetComponent<MeshFilter>().mesh = mesh;
     }
 }

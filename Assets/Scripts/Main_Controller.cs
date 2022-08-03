@@ -55,18 +55,6 @@ public class Main_Controller : MonoBehaviour
             transform.position = new Vector3(_rocket.transform.position.x, _rocket.transform.position.y, transform.position.z);
             transform.SetParent(_rocket.transform);
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            r_controller.TurnLeft();
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            r_controller.TurnRight();
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            r_controller.TurnEngine();
-        }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
@@ -78,5 +66,7 @@ public class Main_Controller : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        r_controller.Control(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
     }
 }
