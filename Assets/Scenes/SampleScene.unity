@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db4e5f48501e61448e731d2982d25ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentRocket: {fileID: 0}
+  CurrentRocket: {fileID: 570278817}
   _rockets:
   - {fileID: 570278817}
   - {fileID: 1943389280}

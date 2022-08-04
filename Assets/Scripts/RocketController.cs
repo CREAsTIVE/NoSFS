@@ -23,7 +23,6 @@ public class RocketController : MonoBehaviour
         {
             GravityCapturedPlanets.Add(planet);
         }
-        transform.SetParent(planet.transform);
         GetSmallestDepthIndex();
     }
     private void OnTriggerExit2D(Collider2D other)
@@ -47,6 +46,7 @@ public class RocketController : MonoBehaviour
         }
         if (maxDepth<0)
             GravityCapturedPlanet = null;
+        transform.SetParent(GravityCapturedPlanet.transform);
     }
 
     private void Update()
