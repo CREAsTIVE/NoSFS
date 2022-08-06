@@ -13,7 +13,7 @@ public class MainController : MonoBehaviour
 
     //Constants:
     public const float CALCULATE_PHYSIC_SIZE = 10f;
-    public const float GRAVITY = 9.8f;
+    public const float GRAVITY = 6.6743f * 0.00000000001f;
 
 
     public float GlobalTime = 0f;

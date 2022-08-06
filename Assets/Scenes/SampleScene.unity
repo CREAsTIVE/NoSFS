@@ -586,7 +586,7 @@ MonoBehaviour:
   GravityCapturedPlanet: {fileID: 0}
   GravityCapturedPlanets: []
   _rotateSpeed: 1
-  _engineSpeed: 1
+  _engineSpeed: 10
 --- !u!4 &570278818
 Transform:
   m_ObjectHideFlags: 0
@@ -595,7 +595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570278816}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 110, z: 0}
+  m_LocalPosition: {x: 1, y: 100.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -615,7 +615,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 3
   m_GravityScale: 0
@@ -952,7 +952,7 @@ MonoBehaviour:
   _colliderVertsCount: 100
   _radius: 50
   _physicSize: 1
-  mass: 250
+  mass: 1.5e+13
   DepthIndex: 1
   Parent: {fileID: 1483948162}
   _circleRadius: 800
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   _colliderVertsCount: 100
   _radius: 100
   _physicSize: 1
-  mass: 750
+  mass: 1.2e+14
   DepthIndex: 0
   Parent: {fileID: 0}
   _circleRadius: 500
@@ -1232,7 +1232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662940370}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -9.41, z: 0}
   m_LocalScale: {x: 0.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1447,7 +1447,7 @@ MonoBehaviour:
   GravityCapturedPlanet: {fileID: 0}
   GravityCapturedPlanets: []
   _rotateSpeed: 1
-  _engineSpeed: 1
+  _engineSpeed: 10
 --- !u!4 &1943389281
 Transform:
   m_ObjectHideFlags: 0
@@ -1476,7 +1476,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 3
   m_GravityScale: 0
